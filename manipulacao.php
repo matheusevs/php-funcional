@@ -11,5 +11,11 @@ function converterPaisParaLetrasMaiusculas ($pais) {
     return $pais;
 }
 
+function verificarSePaisTemEspacoNoNome($pais)
+{
+    return strpos($pais['pais'], ' ') !== false;
+}
+
 $dados = array_map('converterPaisParaLetrasMaiusculas', $dados);
+$dados = array_filter($dados, 'verificarSePaisTemEspacoNoNome');
 var_dump($dados);
