@@ -27,6 +27,25 @@ function verificarSePaisTemEspacoNoNome($pais)
 $dados = array_map('converterPaisParaLetrasMaiusculas', $dados);
 $dados = array_filter($dados, 'verificarSePaisTemEspacoNoNome');
 
+$medalhas = array_reduce(
+    array_map(function ($medalhas) {
+        return array_reduce($medalhas, 'somarMedalhas', 0);
+    }, array_column($dados, 'medalhas')),
+    'somarMedalhas',
+    0
+);
+
+usort($dados, function ($pais1, $pais2) {
+    $medalhasPais1 = $pais1['medalhas'];
+    $medalhasPais2 = $pais2['medalhas'];
+
+    $comparacaoOuro = $medalhasPais2['ouro'] <=> $medalhasPais1['ouro'];
+    $comparacaoPrata = $medalhasPais2['prata'] <=> $medalhasPais1['prata'];
+    $comparacaoBronze = $medalhasPais2['bronze'] <=> $medalhasPais1['bronze'];
+
+    return $comparacaoOuro !== 0 ? $comparacaoOuro : ($comparacaoPrata !== 0 ? $comparacaoPrata : $comparacaoBronze);
+});
+
 var_dump($dados);
 
-echo array_reduce($dados, 'medalhasAcumuladas', 0);
+echo $medalhas;
