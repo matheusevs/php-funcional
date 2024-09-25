@@ -20,7 +20,17 @@ $compararMedalhas = fn ($medalhasPais1, $medalhasPais2) => fn ($modalidade) => $
 $nomeDePaisesEmMaisculo = fn ($dados) => array_map('converterPaisParaLetrasMaiusculas', $dados);
 $filtrarPaisesSemEspacoNome = fn ($dados) => array_filter($dados, $verificarSePaisTemEspacoNoNome);
 
-$dados = $filtrarPaisesSemEspacoNome($nomeDePaisesEmMaisculo($dados));
+function pipe(...$funcoes)
+{
+    return fn ($valor) => array_reduce(
+        $funcoes, 
+        fn ($valorAcumulado, $funcaoAtual) => $funcaoAtual($valorAcumulado), 
+        $valor
+    );
+}
+
+$funcoes = pipe($nomeDePaisesEmMaisculo, $filtrarPaisesSemEspacoNome);
+$dados = $funcoes($dados);
 
 $medalhas = array_reduce(
     array_map(fn ($medalhas) => array_reduce($medalhas, $somarMedalhas, 0),
