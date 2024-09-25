@@ -29,7 +29,11 @@ function pipe(...$funcoes)
     );
 }
 
-$funcoes = pipe($nomeDePaisesEmMaisculo, $filtrarPaisesSemEspacoNome);
+$funcoes = pipe(
+    $nomeDePaisesEmMaisculo, 
+    $filtrarPaisesSemEspacoNome
+);
+
 $dados = $funcoes($dados);
 
 $medalhas = array_reduce(
