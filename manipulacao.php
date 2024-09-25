@@ -1,5 +1,7 @@
 <?php
 
+require_once 'vendor/autoload.php';
+
 $dados = require 'dados.php';
 
 $contador = count($dados);
@@ -20,16 +22,7 @@ $compararMedalhas = fn ($medalhasPais1, $medalhasPais2) => fn ($modalidade) => $
 $nomeDePaisesEmMaisculo = fn ($dados) => array_map('converterPaisParaLetrasMaiusculas', $dados);
 $filtrarPaisesSemEspacoNome = fn ($dados) => array_filter($dados, $verificarSePaisTemEspacoNoNome);
 
-function pipe(...$funcoes)
-{
-    return fn ($valor) => array_reduce(
-        $funcoes, 
-        fn ($valorAcumulado, $funcaoAtual) => $funcaoAtual($valorAcumulado), 
-        $valor
-    );
-}
-
-$funcoes = pipe(
+$funcoes = \igorw\pipeline(
     $nomeDePaisesEmMaisculo, 
     $filtrarPaisesSemEspacoNome
 );

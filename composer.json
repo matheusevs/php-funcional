@@ -5,6 +5,7 @@
         }
     },
     "require": {
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "igorw/compose": "^1.0"
     }
 }
