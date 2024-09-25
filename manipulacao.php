@@ -24,6 +24,13 @@ function verificarSePaisTemEspacoNoNome($pais)
     return strpos($pais['pais'], ' ') !== false;
 }
 
+function compararMedalhas($medalhasPais1, $medalhasPais2)
+{
+    return function($modalidade) use ($medalhasPais1, $medalhasPais2) {
+        return $medalhasPais2[$modalidade] <=> $medalhasPais1[$modalidade];
+    };
+}
+
 $dados = array_map('converterPaisParaLetrasMaiusculas', $dados);
 $dados = array_filter($dados, 'verificarSePaisTemEspacoNoNome');
 
@@ -38,12 +45,11 @@ $medalhas = array_reduce(
 usort($dados, function ($pais1, $pais2) {
     $medalhasPais1 = $pais1['medalhas'];
     $medalhasPais2 = $pais2['medalhas'];
+    $comparador = compararMedalhas($medalhasPais1, $medalhasPais2);
 
-    $comparacaoOuro = $medalhasPais2['ouro'] <=> $medalhasPais1['ouro'];
-    $comparacaoPrata = $medalhasPais2['prata'] <=> $medalhasPais1['prata'];
-    $comparacaoBronze = $medalhasPais2['bronze'] <=> $medalhasPais1['bronze'];
-
-    return $comparacaoOuro !== 0 ? $comparacaoOuro : ($comparacaoPrata !== 0 ? $comparacaoPrata : $comparacaoBronze);
+    return $comparador('ouro') !== 0 ? $comparador('ouro') 
+        : ($comparador('prata') !== 0 ? $comparador('prata') 
+        : $comparador('bronze'));
 });
 
 var_dump($dados);
