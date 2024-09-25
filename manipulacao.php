@@ -17,8 +17,10 @@ $verificarSePaisTemEspacoNoNome = fn ($pais) => strpos($pais['pais'], ' ') !== f
 
 $compararMedalhas = fn ($medalhasPais1, $medalhasPais2) => fn ($modalidade) => $medalhasPais2[$modalidade] <=> $medalhasPais1[$modalidade];
 
-$dados = array_map('converterPaisParaLetrasMaiusculas', $dados);
-$dados = array_filter($dados, $verificarSePaisTemEspacoNoNome);
+$nomeDePaisesEmMaisculo = fn ($dados) => array_map('converterPaisParaLetrasMaiusculas', $dados);
+$filtrarPaisesSemEspacoNome = fn ($dados) => array_filter($dados, $verificarSePaisTemEspacoNoNome);
+
+$dados = $filtrarPaisesSemEspacoNome($nomeDePaisesEmMaisculo($dados));
 
 $medalhas = array_reduce(
     array_map(fn ($medalhas) => array_reduce($medalhas, $somarMedalhas, 0),
