@@ -1,6 +1,6 @@
 <?php
 
-namespace Alura\Funcional;
+namespace Alura\Fp;
 
 class Maybe 
 {

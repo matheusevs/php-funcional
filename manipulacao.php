@@ -1,10 +1,12 @@
 <?php
 
+use Alura\Fp\Maybe;
+
 require_once 'vendor/autoload.php';
 
 $dados = require 'dados.php';
 
-$contador = count($dados);
+$contador = count($dados->getOrElse([]));
 
 echo $contador;
 
@@ -19,8 +21,8 @@ $verificarSePaisTemEspacoNoNome = fn ($pais) => strpos($pais['pais'], ' ') !== f
 
 $compararMedalhas = fn ($medalhasPais1, $medalhasPais2) => fn ($modalidade) => $medalhasPais2[$modalidade] <=> $medalhasPais1[$modalidade];
 
-$nomeDePaisesEmMaisculo = fn ($dados) => array_map('converterPaisParaLetrasMaiusculas', $dados);
-$filtrarPaisesSemEspacoNome = fn ($dados) => array_filter($dados, $verificarSePaisTemEspacoNoNome);
+$nomeDePaisesEmMaisculo = fn (Maybe $dados) => Maybe::of(array_map('converterPaisParaLetrasMaiusculas', $dados->getOrElse([])));
+$filtrarPaisesSemEspacoNome = fn (Maybe $dados) => Maybe::of(array_filter($dados->getOrElse([]), $verificarSePaisTemEspacoNoNome));
 
 $funcoes = \igorw\pipeline(
     $nomeDePaisesEmMaisculo, 
